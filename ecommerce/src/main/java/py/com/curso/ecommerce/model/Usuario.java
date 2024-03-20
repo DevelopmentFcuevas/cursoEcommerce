@@ -19,7 +19,7 @@ public class Usuario {
     @Comment("Identificador único del registro.")
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre")
     @Comment("Nombre del usuario")
     private String nombre;
 
@@ -27,15 +27,15 @@ public class Usuario {
     @Comment("Username del usuario")
     private String username;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     @Comment("Email del usuario")
     private String email;
 
-    @Column(name = "direccion", nullable = false)
+    @Column(name = "direccion")
     @Comment("Direccion del usuario")
     private String direccion;
 
-    @Column(name = "telefono", nullable = false)
+    @Column(name = "telefono")
     @Comment("Telefono del usuario")
     private String telefono;
 
@@ -43,7 +43,7 @@ public class Usuario {
     //@Comment("")
     private String tipo;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     @Comment("Password del usuario")
     private String password;
 
