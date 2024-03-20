@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.List;
+
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,4 +46,12 @@ public class Usuario {
     @Column(name = "password", nullable = false)
     @Comment("Password del usuario")
     private String password;
+
+    //Para obtener una lista de productos para usuarios
+    @OneToMany(mappedBy = "usuario")
+    private List<Producto> productos;
+
+    //Para obtener una lista de productos para ordenes
+    @OneToMany(mappedBy = "usuario")
+    private List<Orden> ordenes;
 }

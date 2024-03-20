@@ -32,4 +32,11 @@ public class DetalleOrden {
     @Column(name = "total")
     @Comment("Total del detalle")
     private double total;
+
+    @OneToOne
+    private Orden orden;
+
+    //@OneToOne
+    @ManyToOne
+    private Producto producto;
 }

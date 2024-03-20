@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Entity
-@Table(name = "producto")
+@Table(name = "productos")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +36,9 @@ public class Producto {
     @Column(name = "cantidad")
     @Comment("Cantidad del producto")
     private double cantidad;
+
+    //Aqui lo que va hacer internamente el framework es a crear un campo en la tabla "Producto"
+    //para mandar el IdUsuario o un Usuario como Objeto y que se mapee directamente a la clase "Usuario".
+    @ManyToOne
+    private Usuario usuario;
 }

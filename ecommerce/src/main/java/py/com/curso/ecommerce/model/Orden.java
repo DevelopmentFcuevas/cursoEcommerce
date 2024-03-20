@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orden")
@@ -34,4 +35,13 @@ public class Orden {
     @Column(name = "total")
     @Comment("Total de la orden")
     private double total;
+
+    //Vamos a crear un atributo que nos permita identificar que usuarios estan registrados a una orden.
+    //Aqui lo que va hacer internamente el framework es a crear un campo en la tabla "Producto"
+    //para mandar el IdUsuario o un Usuario como Objeto y que se mapee directamente a la clase "Usuario".
+    @ManyToOne
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "orden")
+    private List<DetalleOrden> detalleOrden;
 }
