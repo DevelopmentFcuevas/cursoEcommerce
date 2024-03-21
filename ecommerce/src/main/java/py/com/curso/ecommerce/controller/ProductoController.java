@@ -47,14 +47,14 @@ public class ProductoController {
             String nombreImagen = uploadFileService.saveImage(file);
             producto.setImagen(nombreImagen);
         } else {
-            if (file.isEmpty()) { //cuando editamos el producto pero NO cambiamos la imagen.
+            /*if (file.isEmpty()) { //cuando editamos el producto pero NO cambiamos la imagen.
                 Producto p = new Producto();
                 p = service.get(producto.getId()).get();
                 producto.setImagen(p.getImagen());
             } else { //cuando editamos el producto y se quiere cambiar tambien la imagen.
                 String nombreImagen = uploadFileService.saveImage(file);
                 producto.setImagen(nombreImagen);
-            }
+            }*/
         }
 
         service.save(producto);
@@ -74,13 +74,44 @@ public class ProductoController {
     }
 
     @PostMapping("/update")
-    public String update(Producto producto) {
+    public String update(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+
+        Producto p = new Producto();
+        p = service.get(producto.getId()).get();
+
+        if (file.isEmpty()) { //cuando editamos el producto pero NO cambiamos la imagen.
+
+            producto.setImagen(p.getImagen());
+        } else { //cuando editamos el producto y se quiere cambiar tambien la imagen.
+            //eliminar imagen
+            //Producto p = new Producto();
+            //p = service.get(producto.getId()).get();
+
+            //eliminar cuando no sea la imagen por defecto.
+            if (!p.getImagen().equals("default.jpg")) {
+                uploadFileService.deleteImage(p.getImagen());
+            }
+
+            String nombreImagen = uploadFileService.saveImage(file);
+            producto.setImagen(nombreImagen);
+        }
+        producto.setUsuario(p.getUsuario());
+
         service.update(producto);
         return "redirect:/productos";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
+        //eliminar imagen
+        Producto p = new Producto();
+        p = service.get(id).get();
+
+        //eliminar cuando no sea la imagen por defecto.
+        if (!p.getImagen().equals("default.jpg")) {
+            uploadFileService.deleteImage(p.getImagen());
+        }
+
         service.delete(id);
         return "redirect:/productos";
     }
