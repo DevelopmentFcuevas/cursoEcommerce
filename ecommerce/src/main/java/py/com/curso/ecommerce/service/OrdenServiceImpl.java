@@ -25,6 +25,7 @@ public class OrdenServiceImpl implements OrdenService {
         return repository.save(orden);
     }
 
+    @Override
     public String generarNumeroOrden() {
         int numero = 0;
         String numeroConcatenado = "";
@@ -42,7 +43,7 @@ public class OrdenServiceImpl implements OrdenService {
             numero++;
         }
 
-        //Ejemplo para armar numero: 00000000010
+        //Ejemplo para armar numero: 00000000010..
         if (numero < 10) {
             numeroConcatenado = "000000000" + String.valueOf(numero);
         } else if (numero < 100) {

@@ -9,10 +9,13 @@ import py.com.curso.ecommerce.model.DetalleOrden;
 import py.com.curso.ecommerce.model.Orden;
 import py.com.curso.ecommerce.model.Producto;
 import py.com.curso.ecommerce.model.Usuario;
+import py.com.curso.ecommerce.service.DetalleOrdenService;
+import py.com.curso.ecommerce.service.OrdenService;
 import py.com.curso.ecommerce.service.ProductoService;
 import py.com.curso.ecommerce.service.UsuarioService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +34,12 @@ public class HomeController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private OrdenService ordenService;
+
+    @Autowired
+    private DetalleOrdenService detalleOrdenService;
 
 
     @GetMapping("")
@@ -138,6 +147,33 @@ public class HomeController {
         model.addAttribute("usuario", usuario);
 
         return "usuario/resumenorden";
+    }
+
+    //Guardar la orden
+    @GetMapping("/saveOrder")
+    public String saveOrder() {
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generarNumeroOrden());
+
+        //usuario
+        Usuario usuario = usuarioService.findById(1L).get();
+        orden.setUsuario(usuario);
+
+        ordenService.save(orden);
+
+        //guardar detalles
+        for (DetalleOrden dt:detalleOrdens) {
+            dt.setOrden(orden);
+            detalleOrdenService.save(dt);
+        }
+
+        //limpiar lista y orden
+        orden = new Orden();
+        detalleOrdens.clear();
+
+        return "redirect:/";
+
     }
 
 }
