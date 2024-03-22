@@ -60,7 +60,15 @@ public class HomeController {
         detalle.setTotal(producto.getPrecio() * cantidad);
         detalle.setProducto(producto);
 
-        detalleOrdens.add(detalle);
+        //validar que el producto no se anhada dos veces
+        Long idProducto = producto.getId();
+        //Si existe algun producto con ese id,sabremos si es que hay algo ingresado con ese codigo(idProducto)
+        boolean ingresado = detalleOrdens.stream().anyMatch(p -> p.getProducto().getId() == idProducto);
+
+        if (!ingresado) {
+            detalleOrdens.add(detalle);
+        }
+
 
         //Sumar el total de lo que anhada el usuario al carrito.
         //dt-> : Se refiere a una funcion anonima.
@@ -105,6 +113,13 @@ public class HomeController {
 
         return "usuario/carrito";
 
+    }
+
+    @GetMapping("/getCart")
+    public String getCart(Model model) {
+        model.addAttribute("cart", detalleOrdens);
+        model.addAttribute("orden", orden);
+        return "/usuario/carrito";
     }
 
 }
