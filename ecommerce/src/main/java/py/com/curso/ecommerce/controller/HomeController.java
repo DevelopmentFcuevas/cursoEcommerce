@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import py.com.curso.ecommerce.model.DetalleOrden;
 import py.com.curso.ecommerce.model.Orden;
 import py.com.curso.ecommerce.model.Producto;
+import py.com.curso.ecommerce.model.Usuario;
 import py.com.curso.ecommerce.service.ProductoService;
+import py.com.curso.ecommerce.service.UsuarioService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,10 @@ public class HomeController {
 
     //Para almacenar datos de la orden
     Orden orden = new Orden();
+
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     @GetMapping("")
     public String home(Model model) {
@@ -123,7 +129,14 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order() {
+    public String order(Model model) {
+
+        Usuario usuario = usuarioService.findById(1L).get();
+
+        model.addAttribute("cart", detalleOrdens);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
+
         return "usuario/resumenorden";
     }
 
