@@ -22,7 +22,7 @@ public class HomeController {
     private ProductoService productoService;
 
     //Lista para almacenar los detalles de la orden.
-    List<DetalleOrden> detalleOrdens = new ArrayList<DetalleOrden>();
+    List<DetalleOrden> detalleOrdens = new ArrayList<DetalleOrden>(); //detalles
 
     //Para almacenar datos de la orden
     Orden orden = new Orden();
@@ -44,7 +44,7 @@ public class HomeController {
     }
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam Long id, @RequestParam Integer cantidad) {
+    public String addCart(@RequestParam Long id, @RequestParam Integer cantidad, Model model) {
         DetalleOrden detalle = new DetalleOrden();
         Producto producto = new Producto();
         double sumaTotal = 0;
@@ -52,6 +52,26 @@ public class HomeController {
         Optional<Producto> optionalProducto = productoService.get(id);
         log.info("Producto agregado: {}", optionalProducto.get().getId());
         log.info("Cantidad: {}", cantidad);
+
+        producto = optionalProducto.get();
+        detalle.setCantidad(cantidad);
+        detalle.setNombre(producto.getNombre());
+        detalle.setPrecio(producto.getPrecio());
+        detalle.setTotal(producto.getPrecio() * cantidad);
+        detalle.setProducto(producto);
+
+        detalleOrdens.add(detalle);
+
+        //Sumar el total de lo que anhada el usuario al carrito.
+        //dt-> : Se refiere a una funcion anonima.
+        //basicamente lo que hace es sumarnos todos los totales de los productos
+        //que esten en esa lista(dt).
+        sumaTotal = detalleOrdens.stream().mapToDouble(dt -> dt.getTotal()).sum();
+
+        orden.setTotal(sumaTotal);
+
+        model.addAttribute("cart", detalleOrdens);
+        model.addAttribute("orden", orden);
         return "usuario/carrito";
     }
 
