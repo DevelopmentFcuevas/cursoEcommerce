@@ -4,13 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import py.com.curso.ecommerce.model.DetalleOrden;
+import py.com.curso.ecommerce.model.Orden;
 import py.com.curso.ecommerce.model.Producto;
 import py.com.curso.ecommerce.service.ProductoService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,6 +20,12 @@ import java.util.Optional;
 public class HomeController {
     @Autowired
     private ProductoService productoService;
+
+    //Lista para almacenar los detalles de la orden.
+    List<DetalleOrden> detalleOrdens = new ArrayList<DetalleOrden>();
+
+    //Para almacenar datos de la orden
+    Orden orden = new Orden();
 
     @GetMapping("")
     public String home(Model model) {
@@ -37,7 +44,14 @@ public class HomeController {
     }
 
     @PostMapping("/cart")
-    public String addCart() {
+    public String addCart(@RequestParam Long id, @RequestParam Integer cantidad) {
+        DetalleOrden detalle = new DetalleOrden();
+        Producto producto = new Producto();
+        double sumaTotal = 0;
+
+        Optional<Producto> optionalProducto = productoService.get(id);
+        log.info("Producto agregado: {}", optionalProducto.get().getId());
+        log.info("Cantidad: {}", cantidad);
         return "usuario/carrito";
     }
 
