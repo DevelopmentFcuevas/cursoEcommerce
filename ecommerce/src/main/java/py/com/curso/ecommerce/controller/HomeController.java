@@ -75,4 +75,36 @@ public class HomeController {
         return "usuario/carrito";
     }
 
+    @GetMapping("/delete/cart/{id}")
+    public String deleteProductoCart(@PathVariable Long id, Model model) {
+
+        //Lista nueva de productos
+        List<DetalleOrden> ordenesNuevas = new ArrayList<DetalleOrden>();
+
+        for (DetalleOrden detalleOrden: detalleOrdens) {
+            if (detalleOrden.getProducto().getId() != id) {
+                ordenesNuevas.add(detalleOrden);
+            }
+        }
+
+        //Poner la nueva lista con los productos restantes
+        detalleOrdens = ordenesNuevas;
+
+        //Calcular nuevamente los productos
+        double sumaTotal = 0;
+        //Sumar el total de lo que anhada el usuario al carrito.
+        //dt-> : Se refiere a una funcion anonima.
+        //basicamente lo que hace es sumarnos todos los totales de los productos
+        //que esten en esa lista(dt).
+        sumaTotal = detalleOrdens.stream().mapToDouble(dt -> dt.getTotal()).sum();
+
+        orden.setTotal(sumaTotal);
+
+        model.addAttribute("cart", detalleOrdens);
+        model.addAttribute("orden", orden);
+
+        return "usuario/carrito";
+
+    }
+
 }
