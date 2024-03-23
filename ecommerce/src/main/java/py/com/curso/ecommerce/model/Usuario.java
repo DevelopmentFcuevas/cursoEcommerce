@@ -23,7 +23,7 @@ public class Usuario {
     @Comment("Nombre del usuario")
     private String nombre;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     @Comment("Username del usuario")
     private String username;
 
