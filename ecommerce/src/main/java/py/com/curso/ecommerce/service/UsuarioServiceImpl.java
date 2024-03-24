@@ -22,4 +22,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return repository.save(usuario);
     }
 
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
 }
