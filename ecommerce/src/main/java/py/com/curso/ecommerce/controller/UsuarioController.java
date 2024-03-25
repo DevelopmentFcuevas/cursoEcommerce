@@ -48,7 +48,7 @@ public class UsuarioController {
         //Para que nos guarde la session.
         if (user.isPresent()) {
             log.info("Usuario de db: {}", user.get().getEmail());
-            
+
             session.setAttribute("idUsuario", user.get().getId());
 
             if (user.get().getTipo().equals("ADMIN")) {

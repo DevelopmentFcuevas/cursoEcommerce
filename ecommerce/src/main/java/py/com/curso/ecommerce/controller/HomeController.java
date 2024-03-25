@@ -1,5 +1,6 @@
 package py.com.curso.ecommerce.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,8 @@ public class HomeController {
 
 
     @GetMapping("")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
+        log.info("Sesion del usuario: {}", session.getAttribute("idUsuario"));
         model.addAttribute("productos", productoService.findAll());
         return "usuario/home";
     }
@@ -139,9 +141,11 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model) {
+    public String order(Model model, HttpSession session) {
 
-        Usuario usuario = usuarioService.findById(1L).get();
+        //Usuario usuario = usuarioService.findById(1L).get();
+        //Usuario usuario = usuarioService.findById(Long.parseLong((String) session.getAttribute("idUsuario"))).get();
+        Usuario usuario = usuarioService.findById(Long.parseLong(session.getAttribute("idUsuario").toString())).get();
 
         model.addAttribute("cart", detalleOrdens);
         model.addAttribute("orden", orden);
@@ -152,21 +156,25 @@ public class HomeController {
 
     //Guardar la orden
     @GetMapping("/saveOrder")
-    public String saveOrder() {
+    public String saveOrder(HttpSession session) {
         Date fechaCreacion = new Date();
         orden.setFechaCreacion(fechaCreacion);
         orden.setNumero(ordenService.generarNumeroOrden());
 
         //usuario
-        Usuario usuario = usuarioService.findById(1L).get();
+        //Usuario usuario = usuarioService.findById(1L).get();
+        Usuario usuario = usuarioService.findById(Long.parseLong(session.getAttribute("idUsuario").toString())).get();
         orden.setUsuario(usuario);
 
         ordenService.save(orden);
+        log.info("ORDEN: {}", orden.getId());
 
         //guardar detalles
         for (DetalleOrden dt:detalleOrdens) {
             dt.setOrden(orden);
             detalleOrdenService.save(dt);
+            log.info("DETALLEORDEN: {}", orden);
+            log.info("DETALLEORDEN_DT: ", dt);
         }
 
         //limpiar lista y orden

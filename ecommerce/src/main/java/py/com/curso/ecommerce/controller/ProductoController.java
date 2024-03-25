@@ -1,5 +1,6 @@
 package py.com.curso.ecommerce.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import py.com.curso.ecommerce.model.Producto;
 import py.com.curso.ecommerce.model.Usuario;
 import py.com.curso.ecommerce.service.ProductoService;
 import py.com.curso.ecommerce.service.UploadFileService;
+import py.com.curso.ecommerce.service.UsuarioService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -22,6 +24,8 @@ public class ProductoController {
     private ProductoService service;
     @Autowired
     private UploadFileService uploadFileService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("")
     public String show(Model model) {
@@ -35,11 +39,13 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         log.info("Este es el objeto producto: {}", producto);
-        Usuario usuario = new Usuario();
-        Long identificador = 1L;
-        usuario.setId(identificador);
+        //Usuario usuario = new Usuario();
+        //Long identificador = 1L;
+        Usuario usuario = usuarioService.findById((Long) session.getAttribute("idUsuario")).get();
+        //usuario.setId(identificador);
+        usuario.setId(usuario.getId());
         producto.setUsuario(usuario);
 
         //imagen
