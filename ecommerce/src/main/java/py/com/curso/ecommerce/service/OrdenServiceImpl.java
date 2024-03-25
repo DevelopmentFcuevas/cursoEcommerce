@@ -8,6 +8,7 @@ import py.com.curso.ecommerce.repository.OrdenRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrdenServiceImpl implements OrdenService {
@@ -63,6 +64,11 @@ public class OrdenServiceImpl implements OrdenService {
     @Override
     public List<Orden> findByUsuario(Usuario usuario) {
         return repository.findByUsuario(usuario);
+    }
+
+    @Override
+    public Optional<Orden> findById(Long id) {
+        return repository.findById(id);
     }
 
 }
