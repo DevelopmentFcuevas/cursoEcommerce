@@ -8,9 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import py.com.curso.ecommerce.model.Orden;
 import py.com.curso.ecommerce.model.Usuario;
+import py.com.curso.ecommerce.service.OrdenService;
 import py.com.curso.ecommerce.service.UsuarioService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,6 +22,9 @@ import java.util.Optional;
 public class UsuarioController {
     @Autowired
     private UsuarioService service; //usuarioService
+
+    @Autowired
+    private OrdenService ordenService;
 
     // /usuario/registro
     @GetMapping("/registro")
@@ -67,6 +73,11 @@ public class UsuarioController {
     @GetMapping("/compras")
     public String obtenerCompras(Model model, HttpSession session) {
         model.addAttribute("session", session.getAttribute("idUsuario"));
+
+        Usuario usuario = service.findById( Long.parseLong(session.getAttribute("idUsuario").toString()) ).get();
+        List<Orden> ordenes = ordenService.findByUsuario(usuario);
+        model.addAttribute("ordenes", ordenes);
+
         return "usuario/compras";
     }
 

@@ -3,6 +3,7 @@ package py.com.curso.ecommerce.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import py.com.curso.ecommerce.model.Orden;
+import py.com.curso.ecommerce.model.Usuario;
 import py.com.curso.ecommerce.repository.OrdenRepository;
 
 import java.util.ArrayList;
@@ -57,6 +58,11 @@ public class OrdenServiceImpl implements OrdenService {
         }
 
         return numeroConcatenado;
+    }
+
+    @Override
+    public List<Orden> findByUsuario(Usuario usuario) {
+        return repository.findByUsuario(usuario);
     }
 
 }

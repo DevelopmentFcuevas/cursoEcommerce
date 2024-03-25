@@ -5,7 +5,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(name = "detalle_orden")
-
 public class DetalleOrden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
