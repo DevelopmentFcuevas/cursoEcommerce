@@ -5,12 +5,18 @@ import org.springframework.stereotype.Service;
 import py.com.curso.ecommerce.model.Usuario;
 import py.com.curso.ecommerce.repository.UsuarioRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     UsuarioRepository repository;
+
+    @Override
+    public List<Usuario> findAll() {
+        return repository.findAll();
+    }
 
     @Override
     public Optional<Usuario> findById(Long id) {
