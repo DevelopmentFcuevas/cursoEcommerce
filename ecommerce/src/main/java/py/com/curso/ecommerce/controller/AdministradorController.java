@@ -1,10 +1,13 @@
 package py.com.curso.ecommerce.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import py.com.curso.ecommerce.model.Orden;
 import py.com.curso.ecommerce.model.Producto;
 import py.com.curso.ecommerce.service.OrdenService;
 import py.com.curso.ecommerce.service.ProductoService;
@@ -14,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/administrador")
+@Slf4j
 public class AdministradorController {
     @Autowired
     private ProductoService productoService;
@@ -41,6 +45,16 @@ public class AdministradorController {
     public String ordenes(Model model) {
         model.addAttribute("ordenes", ordenService.findAll());
         return "administrador/ordenes";
+    }
+
+    @GetMapping("/detalle/{id}")
+    public String detalle(Model model, @PathVariable Long id) {
+        log.info("Id de la orden: {}", id);
+
+        Orden orden = ordenService.findById(id).get();
+        model.addAttribute("detalles", orden.getDetalleOrden());
+
+        return "administrador/detalleorden";
     }
 
 }
